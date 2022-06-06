@@ -1,0 +1,119 @@
+{% extends 'base.html' %} {% block body %}
+<style>
+  h1 {
+    text-align: center;
+  }
+  .bgc-info {
+    border: 2px solid #5bc0de;
+    border-radius: 5px;
+    background-color: white;
+  }
+  .centered {
+    display: block;
+    margin: 0 auto;
+    text-align: left;
+    width: 800px;
+  }
+
+  .callout {
+    padding: 1.25rem;
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+    border: 1px solid #e9ecef;
+    border-left-width: 0.25rem;
+    border-radius: 0.25rem;
+  }
+  .callout-info {
+    border-left-color: #5bc0de;
+  }
+</style>
+{% if isConnected %}
+<div class="alert alert-success" role="alert">Hardware Connected</div>
+{% else %}
+<div class="alert alert-danger" role="alert">Hardware Disconnected</div>
+{% endif %}
+<div class="header p-3 mb-2 bgc-info text-dark"><h1>Interactive Plot</h1></div>
+<div class="container-fluid pb-3">
+  <div class="d-grid gap-3" style="grid-template-columns: 2fr 3fr">
+    <div class="bg-light border rounded-3">
+      <div class="container centered">
+        <div class="container mx-auto my-4">
+          <h2>Objectives</h2>
+        </div>
+        <div class="callout callout-info">
+          Set up the experiment by selecting wire-width in the blynk control
+          page. The wireframe will adjust it's position in front of the laser to
+          keep the selected wire in the center of the light source.
+        </div>
+        <div class="callout callout-info">
+          You can observe that as you select the parameter, the actuators in the
+          backend will move the wireframe and the fringe pattern will change
+          accordingly.
+        </div>
+        <div class="callout callout-info">
+          Make measurements using your mouse pointer by noting down the
+          coordinates and calculating the distances. After all this is done, you
+          can substitute these values in the formula given in the
+          <a href="/">Experiment page</a> to get the width of the wire.
+        </div>
+      </div>
+    </div>
+    <div class="bg-light border rounded-3">
+      <div class="container mx-auto my-4">
+        <h2>Plot</h2>
+        <p>
+          Move your cursor in the plot to get the coordinates of the bright
+          fringes. Note down the coordinates for further calculation.
+        </p>
+
+        <div class="centered mb-3">{{div | safe}}</div>
+        <a href="/interactiveplot" class="btn btn-outline-primary" role="button"
+          >Update</a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid p-3">
+  <div class="d-grid gap-3" style="grid-template-columns: 4fr 5fr">
+    <div class="bg-light border rounded-3">
+      <div class="container mx-auto my-4">
+        <h2>Analysis</h2>
+        <p>
+          Using the calculated distances, use the formula to get the wire width.
+          Compare the wire width that you got with the true value. Perform this
+          experiment atleast 5 times. Calculate error, mean and standard
+          deviation of your values. Report the error.
+        </p>
+      </div>
+    </div>
+    <div class="bg-light border rounded-3">
+      <div class="container mx-auto my-4">
+        <h2>Setting Up the Experiment Configuration</h2>
+        <p>
+          Choose one of the three configurations from below, this change in
+          configuration will change the actuator input which will help changing
+          the fringe width of the pattern.
+        </p>
+        <form class="row g-3" method="post" action="/interactiveplot">
+          {% csrf_token %}
+          <div class="col-auto">
+            <label for="exampleInputEmail1" class="visually-hidden"
+              >Configuration Value</label
+            >
+            <input
+              type="text"
+              name="val"
+              class="form-control"
+              placeholder="Configuration Value"
+            />
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endblock body %}
+</div>
